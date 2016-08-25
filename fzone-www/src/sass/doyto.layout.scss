@@ -1,0 +1,122 @@
+@import "doyto.bootstrap.fix";
+$spacing:14px;
+$headerHeight:40px;
+html, body {
+  height:100%;
+  overflow:hidden;
+}
+/*⬇️⬇️⬇ .dy-layout ⬇️⬇️⬇*/
+@mixin no-border {
+  border:none;
+  border-radius:0;
+  -webkit-box-shadow:none;
+  box-shadow:none;
+}
+.dy-layout {
+
+  .navbar {
+    @include no-border;
+    .dropdown-menu {
+      //@include no-border;
+    }
+  }
+
+  .panel, .panel-heading {
+    //@include no-border
+    border-radius:0;
+  }
+
+  > header {
+    position:fixed;
+    top:0;
+    width:100%;
+    z-index:1000;
+
+    //overflow:hidden;
+    .navbar {
+      min-height:$headerHeight;
+      background-color:#337ab7;
+      margin-bottom:0;
+    }
+
+    .navbar-brand {
+      height:$headerHeight;
+      padding:10px;
+    }
+  }
+
+  > section {
+    display:flex;
+    margin-top:$headerHeight;
+    height:calc(100% - 40px);
+
+    > aside {
+      border-top:2px #fff solid;
+      position:relative;
+      z-index:1;
+      width:150px;
+      max-width:300px;
+      min-width:100px;
+      background-color:#d9edf7;
+
+      > div:first-child {
+        height:100%;
+        overflow-y:auto;
+      }
+      .list-group-item {
+        border-radius:0;
+      }
+    }
+    > main {
+      padding:20px $spacing * 2;
+      flex:1;
+      display:flex;
+      flex-flow:column nowrap;
+      //justify-content: space-around;
+      align-content:space-around;
+      overflow-y:auto;
+    }
+
+    .panel-heading {
+      display:block;
+    }
+  }
+
+  @media (min-width:768px) {
+    .navbar-nav > li > a {
+      padding-top:10px;
+      padding-bottom:10px;
+    }
+  }
+  @media (max-width:767px) {
+  }
+}
+/*⬆⬆⬆⬆⬆⬆⬆⬆⬆⬆*/
+
+/*========== class ============*/
+.ellipsis, .clip {
+  white-space:nowrap;
+  word-wrap:normal;
+  overflow:hidden;
+  -o-text-overflow:ellipsis; /* Opera 9-10.6 */
+  text-overflow:ellipsis;
+  display:inline-block;
+  *display:inline;
+  *zoom:1;
+  vertical-align:top;
+  max-width:100%;
+  _width:100%;
+  text-align:left; /* Chrome 21+ bug */
+}
+.clip {
+  text-overflow:clip;
+}
+.tab-content pre {
+  border:1px solid #ddd;
+  border-top:none;
+  -moz-border-radius-topleft:0;
+  -moz-border-radius-topright:0;
+  border-top-left-radius:0;
+  border-top-right-radius:0;
+}
+/*========== class ============*/
