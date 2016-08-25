@@ -16,6 +16,8 @@
 
         <Logger name="org.springframework.mock.web.MockServletContext" level="error"/>
 
+        <Logger name="org.springframework.web.servlet" level="debug"/>
+
         <Logger name="win.doyto.fzone.mapper" level="debug"/>
 
         <Logger name="org.apache.ibatis.transaction.jdbc" level="warn"/>

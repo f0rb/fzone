@@ -6,6 +6,7 @@ import javax.annotation.Resource;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import win.doyto.fzone.admin.common.AppConstant;
 import win.doyto.fzone.admin.common.AppContext;
 import win.doyto.fzone.mapper.MenuMapper;
 import win.doyto.fzone.model.Menu;
@@ -55,7 +56,7 @@ public class MenuController {
         List<Menu> menuList;
 
         User oper = AppContext.getLoginUser();
-        if ("root".equals(oper.getUsername())) {
+        if (AppConstant.ROOT.equals(oper.getUsername())) {
             Menu query = new Menu();
             if (onlyLeaf) {
                 query.setOnlyLeaf(true);

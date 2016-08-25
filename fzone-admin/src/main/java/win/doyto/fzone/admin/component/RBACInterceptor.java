@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
+import win.doyto.fzone.admin.common.AppConstant;
 import win.doyto.fzone.admin.common.AppContext;
 import win.doyto.fzone.model.User;
 import win.doyto.rbac.RBACUtils;
@@ -27,7 +28,7 @@ public class RBACInterceptor extends HandlerInterceptorAdapter {
             return false;
         }
         User oper = AppContext.getLoginUser();
-        if (!"root".equals(oper.getUsername())) {
+        if (!AppConstant.ROOT.equals(oper.getUsername())) {
             String permission = Integer.toHexString(handler.toString().hashCode());
             if (!RBACUtils.isPermitted(oper, permission)) {
                 ResponseObject ret = new ResponseObject(ResponseStatus.ACCESS_DENIED);

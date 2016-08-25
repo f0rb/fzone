@@ -2,12 +2,16 @@ package win.doyto.fzone.admin.controller;
 
 import java.awt.image.BufferedImage;
 import java.sql.Timestamp;
+import java.util.List;
 import javax.annotation.Resource;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.serializer.SimplePropertyPreFilter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -16,6 +20,7 @@ import win.doyto.fzone.admin.common.AppConstant;
 import win.doyto.fzone.admin.common.AppContext;
 //import win.doyto.fzone.admin.common.AppMessage;
 import win.doyto.fzone.mapper.UserMapper;
+import win.doyto.fzone.model.Menu;
 import win.doyto.fzone.model.User;
 import win.doyto.util.CaptchaUtils;
 import win.doyto.util.EncryptUtils;
@@ -34,6 +39,21 @@ public class AdminController {
     private UserMapper userMapper;
     @Resource
     private MessageSource messageSource;
+    
+    @Resource
+    private MenuController menuController;
+
+    @RequestMapping("/")
+    public String index(Model model) {
+        if (AppContext.getLoginUser() == null) {
+            model.addAttribute("redirect", WebContext.getFullURL());
+            return "redirect:/login";
+        }
+        List<Menu> menuList = menuController.getMenuList(true);
+        String menuListStr = JSON.toJSONString(menuList, new SimplePropertyPreFilter(Menu.class, "url", "name", "label", "html"));
+        model.addAttribute("menuList", menuListStr);
+        return "forward:/index.jsp";
+    }
 
     @RequestMapping(value = {"login"}, method = RequestMethod.GET)
     public String login(String redirect) {

@@ -15,6 +15,8 @@ public interface AppConstant {
     String RELOAD_CONFIG = "reload";
     String EXCEPTION_ATTR = "org.grs.error.exception";
 
+    String ROOT = "root";
+
     String REDIRECT_URL = "redirectURL";
     String DEFAULT_LOCALE_NAME = "html_locale";
     Locale DEFAULT_LOCALE = Locale.CHINA;

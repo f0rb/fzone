@@ -40,8 +40,8 @@
             "ct.ui.router.extras.sticky"
         ]);
         var Config = window.Config || {};
-        <%--Config.models = ${menuList};--%>
-        Config.models = [{"label":"用户管理面板","name":"dashboard","url":"#"},{"label":"菜单管理","name":"menu","url":"menu"},{"label":"权限管理","name":"perm","url":"perm"},{"label":"用户管理","name":"user","url":"user"},{"label":"角色管理","name":"role","url":"role"},{"label":"字典管理","name":"dict","url":"dict"},{"label":"分类管理","name":"category","url":"category"},{"label":"文章列表","name":"post","url":"post"}];
+        Config.models = ${menuList};
+//        Config.models = [{"label":"用户管理面板","name":"dashboard","url":"#"},{"label":"菜单管理","name":"menu","url":"menu"},{"label":"权限管理","name":"perm","url":"perm"},{"label":"用户管理","name":"user","url":"user"},{"label":"角色管理","name":"role","url":"role"},{"label":"字典管理","name":"dict","url":"dict"},{"label":"分类管理","name":"category","url":"category"},{"label":"文章列表","name":"post","url":"post"}];
         Config.base = 'admin';
     </script>
     <script src="<c:url value="/res/admin.js"/>"></script>
@@ -84,7 +84,7 @@
             <div class="panel panel-info" ng-repeat="menu in menuTree.submenu">
                 <a class="panel-heading" role="tab" id="heading-{{menu.id}}" style="display:block"
                    data-toggle="collapse" data-parent="#asideMenu" data-target="#collapse-{{menu.id}}" aria-expanded="true" aria-controls="collapse-{{menu.id}}">
-                    <h4 class="panel-title">{{menu.name}}</h4>
+                    <h4 class="panel-title">{{menu.label}}</h4>
                 </a>
                 <div id="collapse-{{menu.id}}" class="panel-collapse collapse {{['in'][$index]}}" role="tabpanel" aria-labelledby="heading-{{menu.id}}">
                     <div class="list-group">
