@@ -12,7 +12,6 @@ import win.doyto.rbac.RBACPermission;
 
 @Mapper
 //@CacheNamespace(implementation = org.mybatis.caches.hazelcast.HazelcastCache.class)
-@CacheNamespace(implementation = org.mybatis.caches.hazelcast.LoggingHazelcastCache.class)
 public interface RoleMapper extends RBACManager<Role> {
     String Table = "Role";
     String LIST = "SELECT * FROM " + Table;

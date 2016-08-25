@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/tx
+		http://www.springframework.org/schema/tx/spring-tx.xsd
+		">
+
+    <!-- Hikari Datasource -->
+    <bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource" destroy-method="close">
+        <!-- 无需指定，除非系统无法自动识别 -->
+        <property name="driverClassName" value="${JDBC.driverClass}"/>
+        <property name="jdbcUrl" value="${JDBC.jdbcUrl}"/>
+        <property name="username" value="${JDBC.username}"/>
+        <property name="password" value="${JDBC.password}"/>
+        <property name="autoCommit" value="${JDBC.autoCommit}"/>
+        <!-- 连接只读数据库时配置为true， 保证安全 -->
+        <property name="readOnly" value="false"/>
+        <!-- 等待连接池分配连接的最大时长（毫秒），超过这个时长还没可用的连接则发生SQLException， 缺省:30秒 -->
+        <property name="connectionTimeout" value="30000"/>
+        <!-- 一个连接idle状态的最大时长（毫秒），超时则被释放（retired），缺省:10分钟 -->
+        <property name="idleTimeout" value="600000"/>
+        <!-- 一个连接的生命时长（毫秒），超时而且没被使用则被释放（retired），缺省:30分钟，建议设置比数据库超时时长少30秒，参考MySQL wait_timeout参数（show variables like '%timeout%';） -->
+        <property name="maxLifetime" value="1800000"/>
+        <!-- 连接池中允许的最大连接数。缺省值：10；推荐的公式：((core_count * 2) + effective_spindle_count) -->
+        <property name="maximumPoolSize" value="15"/>
+    </bean>
+
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="configLocation" value="classpath:mybatis.xml"/>
+        <property name="transactionFactory">
+            <bean class="org.mybatis.spring.transaction.SpringManagedTransactionFactory"/>
+        </property>
+    </bean>
+
+    <!-- 查找类basePackage下的Mapper, 并自动将它们创建成MapperFactoryBean -->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="annotationClass" value="org.apache.ibatis.annotations.Mapper"/>
+        <property name="basePackage" value="win.doyto.fzone.mapper"/>
+    </bean>
+
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <!--启用spring @Transactional注解 -->
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+</beans>
