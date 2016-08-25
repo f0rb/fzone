@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="debug">
+    <Appenders>
+        <Console name="CONSOLE" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{HH:mm:ss,SSS} %5p %l- %m%n"/>
+        </Console>
+        <Async name="ASYNC" includeLocation="true">
+            <AppenderRef ref="CONSOLE"/>
+        </Async>
+    </Appenders>
+
+    <Loggers>
+        <Root level="info">
+            <AppenderRef ref="ASYNC"/>
+        </Root>
+
+        <Logger name="org.springframework.mock.web.MockServletContext" level="error"/>
+
+        <Logger name="win.doyto.fzone.mapper" level="debug"/>
+
+        <Logger name="org.apache.ibatis.transaction.jdbc" level="warn"/>
+    </Loggers>
+</Configuration>
