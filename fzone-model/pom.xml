@@ -15,7 +15,7 @@
     <dependencies>
         <dependency>
             <groupId>win.doyto.fzone</groupId>
-            <artifactId>rbac</artifactId>
+            <artifactId>doyto-rbac</artifactId>
             <version>${fzone.version}</version>
         </dependency>
 

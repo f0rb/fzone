@@ -15,13 +15,17 @@
     <dependencies>
         <dependency>
             <groupId>win.doyto.fzone</groupId>
-            <artifactId>web</artifactId>
+            <artifactId>doyto-web</artifactId>
             <version>${fzone.version}</version>
         </dependency>
-
         <dependency>
             <groupId>win.doyto.fzone</groupId>
-            <artifactId>model</artifactId>
+            <artifactId>fzone-model</artifactId>
+            <version>${fzone.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>win.doyto.fzone</groupId>
+            <artifactId>doyto-util</artifactId>
             <version>${fzone.version}</version>
         </dependency>
 
@@ -116,11 +120,6 @@
         <dependency>
             <groupId>com.itextpdf</groupId>
             <artifactId>itextpdf</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>win.doyto.fzone</groupId>
-            <artifactId>doyto-util</artifactId>
-            <version>0.0.1</version>
         </dependency>
     </dependencies>
 </project>
