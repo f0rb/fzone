@@ -1,0 +1,157 @@
+<div ng-controller="PermCtrl">
+    <header style="margin:5px">
+        <form class="form-inline">
+            <label style="margin-left:5px">
+                <input class="form-control" type="text" placeholder="请输入权限名称" ng-model="crud.p.q.name" ng-keyup="crud.p.load(true)"/>
+            </label>
+            <button class="btn btn-default" ng-click="crud.p.reset()">重置</button>
+            <button class="btn btn-success pull-right" data-toggle="modal" data-target="#permAddModal" ng-click="crud.add()">添加权限</button>
+        </form>
+    </header>
+    <section class="table-responsive" style="overflow-y:auto">
+        <table class="table table-hover" style="margin-bottom:0">
+            <thead>
+            <tr>
+                <th></th>
+                <th>名称</th>
+                <th>备注</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="r in crud.p.result">
+                <td>{{$index+1}}</td>
+                <td>{{r.name}}</td>
+                <td>{{r.memo}}</td>
+                <td>
+                    <a ng-click="crud.view(r)" data-toggle="modal" data-target="#permViewModal">查看</a>
+                    <a ng-click="crud.edit(r)" data-toggle="modal" data-target="#permEditModal">修改</a>
+                    <a ng-click="crud.remove(r)">删除</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </section>
+    <footer>
+        <div class="flow page-ul dropup">
+            <div class="btn-group">
+                <button class="btn btn-default" ng-click="crud.p.first();"><i class="fa fa-step-backward"></i></button>
+                <button class="btn btn-default" ng-click="crud.p.prev();"><i class="fa fa-backward"></i></button>
+                <div class="btn-group">
+                    <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                        {{crud.p.page}} / {{crud.p.pages}} <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" style="max-height: 200px;overflow-y:scroll;">
+                        <li ng-repeat="_ in ((_ = []) && (_.length=(crud.p.pages||0)) && _) track by $index">
+                            <a ng-click="crud.p.goto($index+1)">{{$index+1}} / {{crud.p.pages}}</a>
+                        </li>
+                    </ul>
+                </div>
+                <button class="btn btn-default" ng-click="crud.p.next();"><i class="fa fa-forward"></i></button>
+                <button class="btn btn-default" ng-click="crud.p.last();"><i class="fa fa-step-forward"></i></button>
+                <button class="btn btn-default" ng-click="crud.p.load();"><i class="fa fa-refresh"></i></button>
+            </div>
+            <div class="pull-right">
+                <span class="hidden-xs">共有{{crud.p.total}}条数据，显示第{{crud.p.from}}条到第{{crud.p.to}}条，每页</span>
+                <div class="btn-group">
+                    <button class="btn btn-default dropdown-toggle" style="min-width:55px" data-toggle="dropdown">
+                        {{crud.p.limit}} <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu pull-right">
+                        <li ng-repeat="s in [5,10,20,30,50]" style="min-width:55px"><a ng-click="crud.p.size(s)">{{s}}</a></li>
+                    </ul>
+                </div>
+                条
+            </div>
+        </div>
+    </footer>
+    <div id="permAddModal" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">添加权限</h4>
+                </div>
+                <div class="modal-body">
+                    <form id="permAddForm" class="form-horizontal" autocomplete="off" novalidate>
+                        <div class="form-group">
+                            <label class="control-label col-xs-3 col-sm-4" for=inputName1>名称</label>
+                            <div class="col-xs-9 col-sm-5">
+                                <input id=inputName1 name=name class="form-control" type=text ng-model="crud.record.name" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-xs-3 col-sm-4" for=inputIntro1>备注</label>
+                            <div class="col-xs-9 col-sm-5">
+                                <input id=inputIntro1 name=name class="form-control" type=text ng-model="crud.record.memo" required>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary" ng-click="crud.save(crud.record)">添加</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="permEditModal" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">修改权限</h4>
+                </div>
+                <div class="modal-body">
+                    <form id="permEditForm" class="form-horizontal" autocomplete="off" novalidate>
+                        <div class="form-group">
+                            <label class="control-label col-xs-3 col-sm-4" for=inputName>名称</label>
+                            <div class="col-xs-9 col-sm-5">
+                                <input id=inputName name=name class="form-control" type=text ng-model="crud.record.name" ng-required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-xs-3 col-sm-4" for=inputIntro>备注</label>
+                            <div class="col-xs-9 col-sm-5">
+                                <input id=inputIntro name=name class="form-control" type=text ng-model="crud.record.memo" ng-required>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary" ng-click="crud.save(crud.record)">保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="permViewModal" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">查看权限</h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal">
+                        <div class="form-group">
+                            <label class="control-label col-xs-3 col-sm-4">名称</label>
+                            <div class="col-xs-9 col-sm-5">{{crud.record.name}}</div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-xs-3 col-sm-4">备注</label>
+                            <div class="col-xs-9 col-sm-5">{{crud.record.memo}}</div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-xs-3 col-sm-4">创建时间</label>
+                            <div class="col-xs-9 col-sm-5">{{crud.record.createTime}}</div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

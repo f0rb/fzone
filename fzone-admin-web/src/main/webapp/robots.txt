@@ -1,0 +1,7 @@
+User-Agent: *
+Allow: /service
+Allow: /outsourcing
+Allow: /customize
+Allow: /contact
+Allow: /about
+Disallow: /template

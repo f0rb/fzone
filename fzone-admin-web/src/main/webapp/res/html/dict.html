@@ -1,0 +1,275 @@
+<div ng-controller="DictCtrl">
+    <header style="margin:5px">
+        <form class="form-inline">
+            <label style="margin-left:5px">
+                <input class="form-control" type="text" placeholder="请输入数据字典名称" ng-model="crud.p.q.name" ng-keyup="crud.p.load(true)">
+            </label>
+            <button class="btn btn-default" ng-click="crud.p.reset()">重置</button>
+            <button class="btn btn-success pull-right" data-toggle="modal" data-target="#dictAddModal" ng-click="crud.add()">添加数据字典</button>
+        </form>
+    </header>
+    <section class="table-responsive" style="overflow-y:auto">
+        <table class="table table-hover" style="margin-bottom:0">
+            <thead>
+            <tr>
+                <th></th>
+                <th>name</th>
+                <th>key</th>
+                <th>value</th>
+                <th>memo</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="r in crud.p.result">
+                <td>{{$index+1}}</td>
+                <td>{{r.name}}</td>
+                <td>{{r.key}}</td>
+                <td>{{r.value}}</td>
+                <td>{{r.memo}}</td>
+                <td>
+                    <a ng-click="crud.view(r)" data-toggle="modal" data-target="#dictViewModal">查看</a>
+                    <a ng-click="crud.edit(r)" data-toggle="modal" data-target="#dictEditModal">修改</a>
+                    <a ng-click="crud.remove(r)">删除</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </section>
+    <footer>
+        <div class="flow page-ul dropup">
+            <div class="btn-group">
+                <button class="btn btn-default" ng-click="crud.p.first();"><i class="fa fa-step-backward"></i></button>
+                <button class="btn btn-default" ng-click="crud.p.prev();"><i class="fa fa-backward"></i></button>
+                <div class="btn-group">
+                    <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                        {{crud.p.page}} / {{crud.p.pages}} <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" style="max-height: 200px;overflow-y:scroll;">
+                        <li ng-repeat="_ in ((_ = []) && (_.length=(crud.p.pages||0)) && _) track by $index">
+                            <a ng-click="crud.p.goto($index+1)">{{$index+1}} / {{crud.p.pages}}</a>
+                        </li>
+                    </ul>
+                </div>
+                <button class="btn btn-default" ng-click="crud.p.next();"><i class="fa fa-forward"></i></button>
+                <button class="btn btn-default" ng-click="crud.p.last();"><i class="fa fa-step-forward"></i></button>
+                <button class="btn btn-default" ng-click="crud.p.load();"><i class="fa fa-refresh"></i></button>
+            </div>
+            <div class="pull-right">
+                <span class="hidden-xs">共有{{crud.p.total}}条数据，显示第{{crud.p.from}}条到第{{crud.p.to}}条，每页</span>
+                <div class="btn-group">
+                    <button class="btn btn-default dropdown-toggle" style="min-width:55px" data-toggle="dropdown">
+                        {{crud.p.limit}} <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu pull-right">
+                        <li ng-repeat="s in [5,10,20,30,50]" style="min-width:55px"><a ng-click="crud.p.size(s)">{{s}}</a></li>
+                    </ul>
+                </div>
+                条
+            </div>
+        </div>
+    </footer>
+    <div id="dictAddModal" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                    <h4 class="modal-title">添加数据字典</h4>
+                </div>
+                <div class="modal-body">
+                    <form id="dictAddForm" class="form-horizontal" autocomplete="off" novalidate>
+                        <div class="form-group">
+                            <label class="control-label col-xs-3 col-sm-4" for="inputName1">名称</label>
+                            <div class="col-xs-9 col-sm-5">
+                                <input id="inputName1" name="name" class="form-control" type="text" ng-model="crud.record.name" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-xs-3 col-sm-4" for="add-key">key</label>
+                            <div class="col-xs-9 col-sm-5">
+                                <input id="add-key" name="key" class="form-control" type="text" ng-model="crud.record.key" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-xs-3 col-sm-4" for="add-value">value</label>
+                            <div class="col-xs-9 col-sm-5">
+                                <input id="add-value" name="value" class="form-control" type="text" ng-model="crud.record.value" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-xs-3 col-sm-4" for="add-memo">memo</label>
+                            <div class="col-xs-9 col-sm-5">
+                                <input id="add-memo" name="memo" class="form-control" type="text" ng-model="crud.record.memo" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-xs-3 col-sm-4" for="add-leaf">leaf</label>
+                            <div class="col-xs-9 col-sm-5">
+                                <input id="add-leaf" name="leaf" class="form-control" type="text" ng-model="crud.record.leaf" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-xs-3 col-sm-4" for="add-sequence">sequence</label>
+                            <div class="col-xs-9 col-sm-5">
+                                <input id="add-sequence" name="sequence" class="form-control" type="text" ng-model="crud.record.sequence" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-xs-3 col-sm-4" for="add-asDefault">asDefault</label>
+                            <div class="col-xs-9 col-sm-5">
+                                <input id="add-asDefault" name="asDefault" class="form-control" type="text" ng-model="crud.record.asDefault" required>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary" ng-click="crud.save(crud.record)">添加</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="dictEditModal" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                    <h4 class="modal-title">修改数据字典</h4>
+                </div>
+                <div class="modal-body">
+                    <form id="dictEditForm" class="form-horizontal" autocomplete="off" novalidate>
+                        <div class="form-group">
+                            <label class="control-label col-xs-3 col-sm-4" for="inputName">名称</label>
+                            <div class="col-xs-9 col-sm-5">
+                                <input id="inputName" name="name" class="form-control" type="text" ng-model="crud.record.name" ng-required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-xs-3 col-sm-4" for="edit-key">key</label>
+                            <div class="col-xs-9 col-sm-5">
+                                <input id="edit-key" name="key" class="form-control" type="text" ng-model="crud.record.key" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-xs-3 col-sm-4" for="edit-value">value</label>
+                            <div class="col-xs-9 col-sm-5">
+                                <input id="edit-value" name="value" class="form-control" type="text" ng-model="crud.record.value" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-xs-3 col-sm-4" for="edit-memo">memo</label>
+                            <div class="col-xs-9 col-sm-5">
+                                <input id="edit-memo" name="memo" class="form-control" type="text" ng-model="crud.record.memo" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-xs-3 col-sm-4" for="edit-leaf">leaf</label>
+                            <div class="col-xs-9 col-sm-5">
+                                <input id="edit-leaf" name="leaf" class="form-control" type="text" ng-model="crud.record.leaf" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-xs-3 col-sm-4" for="edit-sequence">sequence</label>
+                            <div class="col-xs-9 col-sm-5">
+                                <input id="edit-sequence" name="sequence" class="form-control" type="text" ng-model="crud.record.sequence" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-xs-3 col-sm-4" for="edit-asDefault">asDefault</label>
+                            <div class="col-xs-9 col-sm-5">
+                                <input id="edit-asDefault" name="asDefault" class="form-control" type="text" ng-model="crud.record.asDefault" required>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary" ng-click="crud.save(crud.record)">保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="dictViewModal" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                    <h4 class="modal-title">查看数据字典</h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal">
+                        <div class="form-group">
+                            <label class="control-label col-xs-3 col-sm-4">名称</label>
+                            <div class="col-xs-9 col-sm-5">
+                                <div class="form-control">{{crud.record.name}}</div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-xs-3 col-sm-4">key</label>
+                            <div class="col-xs-9 col-sm-5">
+                                <div class="form-control">{{crud.record.key}}</div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-xs-3 col-sm-4">value</label>
+                            <div class="col-xs-9 col-sm-5">
+                                <div class="form-control">{{crud.record.value}}</div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-xs-3 col-sm-4">memo</label>
+                            <div class="col-xs-9 col-sm-5">
+                                <div class="form-control">{{crud.record.memo}}</div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-xs-3 col-sm-4">leaf</label>
+                            <div class="col-xs-9 col-sm-5">
+                                <div class="form-control">{{crud.record.leaf}}</div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-xs-3 col-sm-4">sequence</label>
+                            <div class="col-xs-9 col-sm-5">
+                                <div class="form-control">{{crud.record.sequence}}</div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-xs-3 col-sm-4">asDefault</label>
+                            <div class="col-xs-9 col-sm-5">
+                                <div class="form-control">{{crud.record.asDefault}}</div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-xs-3 col-sm-4">创建时间</label>
+                            <div class="col-xs-9 col-sm-5">
+                                <div class="form-control">{{crud.record.createTime}}</div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-xs-3 col-sm-4">创建人</label>
+                            <div class="col-xs-9 col-sm-5">
+                                <div class="form-control">{{crud.record.createUserId}}</div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-xs-3 col-sm-4">修改时间</label>
+                            <div class="col-xs-9 col-sm-5">
+                                <div class="form-control">{{crud.record.updateTime}}</div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-xs-3 col-sm-4">修改人</label>
+                            <div class="col-xs-9 col-sm-5">
+                                <div class="form-control">{{crud.record.updateUserId}}</div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

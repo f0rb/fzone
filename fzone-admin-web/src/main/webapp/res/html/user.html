@@ -1,0 +1,278 @@
+<div ng-controller="UserCtrl">
+    <header style="margin:5px 0">
+        <form class="form-inline clearfix">
+            <label>
+                <input class="form-control" type="text" placeholder="请输入用户名称" ng-model="p.q.username" ng-keyup="p.load(true)">
+            </label>
+            <label class="btn-group" style="vertical-align:bottom">
+                <a class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                    <span class="clip" style="width:154px;">{{(roles | filter: {'id': p.q.roleId[0] !== undefined ? p.q.roleId[0] : -1})[0]['name'] || '请选择用户角色' }}</span>
+                    <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu" style="max-height: 200px;overflow-y:scroll;">
+                    <li>
+                        <a ng-click="p.q.roleId = []; roleName=undefined; p.load(true)">请选择用户角色</a>
+                    </li>
+                    <li ng-repeat="_p in roles">
+                        <a ng-click="p.q.roleId = [_p.id];roleName=_p.name; p.load(true)">{{_p.name}}</a>
+                    </li>
+                </ul>
+            </label>
+            <label>
+                <button class="btn btn-default" ng-click="p.reset()">重置</button>
+            </label>
+            <button class="btn btn-success pull-right" data-toggle="modal" data-target="#userAddModal" ng-click="add()">添加用户</button>
+        </form>
+    </header>
+    <section class="table-responsive" style="overflow-y:auto">
+        <table class="table table-hover" style="margin-bottom:0">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>级别</th>
+                <th>用户名</th>
+                <th>昵称</th>
+                <th>邮箱</th>
+                <th>电话</th>
+                <th>最近登录时间</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="r in p.result">
+                <td>{{$index+1}}</td>
+                <td>{{r.rank}}</td>
+                <td>{{r.username}}</td>
+                <td>{{r.nickname}}</td>
+                <td>{{r.email}}</td>
+                <td>{{r.mobile}}</td>
+                <td>{{r.lastLogin}}</td>
+                <td>
+                    <a ng-click="view(r)" data-toggle="modal" data-target="#userViewModal">查看</a>
+                    <a ng-click="edit(r)" data-toggle="modal" data-target="#userEditModal">修改</a>
+                    <a ng-click="role(r)" data-toggle="modal" data-target="#userRoleModal">角色</a>
+                    <a ng-click="remove(r)">删除</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </section>
+    <footer>
+        <div class="flow page-ul dropup">
+            <div class="btn-group">
+                <button class="btn btn-default" ng-click="p.first();"><i class="fa fa-step-backward"></i></button>
+                <button class="btn btn-default" ng-click="p.prev();"><i class="fa fa-backward"></i></button>
+                <div class="btn-group">
+                    <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                        {{p.page}} / {{p.pages}} <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" style="max-height: 200px;overflow-y:scroll;">
+                        <li ng-repeat="_ in ((_ = []) && (_.length=(p.pages||0)) && _) track by $index">
+                            <a ng-click="p.goto($index+1)">{{$index+1}} / {{p.pages}}</a>
+                        </li>
+                    </ul>
+                </div>
+                <button class="btn btn-default" ng-click="p.next();"><i class="fa fa-forward"></i></button>
+                <button class="btn btn-default" ng-click="p.last();"><i class="fa fa-step-forward"></i></button>
+                <button class="btn btn-default" ng-click="p.load();"><i class="fa fa-refresh"></i></button>
+            </div>
+            <div class="pull-right">
+                <span class="hidden-xs">共有{{p.total}}条数据，显示第{{p.from}}条到第{{p.to}}条，每页</span>
+                <div class="btn-group">
+                    <button class="btn btn-default dropdown-toggle" style="min-width:55px" data-toggle="dropdown">
+                        {{p.limit}} <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu pull-right">
+                        <li ng-repeat="s in [5,10,20,30,50]" style="min-width:55px"><a ng-click="p.size(s)">{{s}}</a></li>
+                    </ul>
+                </div>
+                条
+            </div>
+        </div>
+    </footer>
+    <div id="userAddModal" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                    <h4 class="modal-title">添加用户</h4>
+                </div>
+                <div class="modal-body">
+                    <form id="userAddForm" class="form-horizontal" autocomplete="off" novalidate>
+                        <div class="form-group">
+                            <label class="control-label col-xs-3 col-sm-4" for=inputUsername1>用户名</label>
+                            <div class="col-xs-9 col-sm-5">
+                                <input id=inputUsername1 name=username class="form-control" type=text ng-model="user.username" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-xs-3 col-sm-4" for=inputPassword1>密码</label>
+                            <div class="col-xs-9 col-sm-5">
+                                <input id=inputPassword1 name=password class="form-control" type=text ng-model="user.password">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-xs-3 col-sm-4" for=inputEmail1>邮箱</label>
+                            <div class="col-xs-9 col-sm-5">
+                                <input id=inputEmail1 name=email class="form-control" type="text" ng-model="user.email">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-xs-3 col-sm-4" for=inputNickname1>昵称</label>
+                            <div class="col-xs-9 col-sm-5">
+                                <input id=inputNickname1 name=nickname class="form-control" type=text ng-model="user.nickname">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-xs-3 col-sm-4" for=inputMobile1>电话</label>
+                            <div class="col-xs-9 col-sm-5">
+                                <input id=inputMobile1 name=mobile class="form-control" type=text ng-model="user.mobile">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-xs-3 col-sm-4">角色</label>
+                            <div class="col-xs-9 col-sm-5">
+                                <div class="checkbox" style="padding-top:0" ng-repeat="r in roles track by $index">
+                                    <div style="border-top:1px solid #c0c0c0" ng-if="$index > 0 && r.rank != roles[$index - 1].rank"></div>
+                                    <div class="checkbox" style="padding-top:0">
+                                        <label>
+                                            <input name="roles" type="checkbox" ng-model="userRoles[r.id]">{{r.name}}
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary" ng-click="save(user)">添加</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="userEditModal" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                    <h4 class="modal-title">修改用户</h4>
+                </div>
+                <div class="modal-body">
+                    <form id="userEditForm" class="form-horizontal" autocomplete="off" novalidate>
+                        <div class="form-group">
+                            <label class="control-label col-xs-3 col-sm-4">用户名</label>
+                            <div class="col-xs-9 col-sm-5">{{user.username}}</div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-xs-3 col-sm-4" for=inputEmail>邮箱</label>
+                            <div class="col-xs-9 col-sm-5">
+                                <input id=inputEmail name=email class="form-control" type="email" ng-model="user.email">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-xs-3 col-sm-4" for=inputNickname>昵称</label>
+                            <div class="col-xs-9 col-sm-5">
+                                <input id=inputNickname name=nickname class="form-control" type=text ng-model="user.nickname">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-xs-3 col-sm-4" for=inputMobile>电话</label>
+                            <div class="col-xs-9 col-sm-5">
+                                <input id=inputMobile name=mobile class="form-control" type=text ng-model="user.mobile">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary" ng-click="save(user)">保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="userRoleModal" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                    <h4 class="modal-title">修改用户角色</h4>
+                </div>
+                <div class="modal-body">
+                    <form id="userRoleForm" class="form-horizontal" autocomplete="off" novalidate>
+                        <div class="form-group">
+                            <label class="control-label col-xs-3 col-sm-4">角色</label>
+                            <div class="col-xs-9 col-sm-5">
+                                <div class="checkbox" style="padding-top:0" ng-repeat="r in roles track by $index">
+                                    <div style="border-top:1px solid #c0c0c0" ng-if="$index > 0 && r.rank != roles[$index - 1].rank"></div>
+                                    <div class="checkbox" style="padding-top:0">
+                                        <label>
+                                            <input name="roles" type="checkbox" ng-model="userRoles[r.id]">{{r.name}}
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary" ng-click="updateRole(user)">保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="userViewModal" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                    <h4 class="modal-title">查看用户</h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal">
+                        <div class="form-group">
+                            <label class="control-label col-xs-3 col-sm-4">用户名</label>
+                            <div class="col-xs-9 col-sm-5">{{user.username}}</div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-xs-3 col-sm-4">级别</label>
+                            <div class="col-xs-9 col-sm-5">{{user.rank}}</div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-xs-3 col-sm-4">邮箱</label>
+                            <div class="col-xs-9 col-sm-5">{{user.email}}</div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-xs-3 col-sm-4">昵称</label>
+                            <div class="col-xs-9 col-sm-5">{{user.nickname}}</div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-xs-3 col-sm-4">电话</label>
+                            <div class="col-xs-9 col-sm-5">{{user.mobile}}</div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-xs-3 col-sm-4">创建时间</label>
+                            <div class="col-xs-9 col-sm-5">{{user.createTime}}</div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-xs-3 col-sm-4">创建人</label>
+                            <div class="col-xs-9 col-sm-5">{{user.createUserId}}</div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-xs-3 col-sm-4">修改时间</label>
+                            <div class="col-xs-9 col-sm-5">{{user.updateTime}}</div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-xs-3 col-sm-4">修改人</label>
+                            <div class="col-xs-9 col-sm-5">{{user.updateUserId}}</div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

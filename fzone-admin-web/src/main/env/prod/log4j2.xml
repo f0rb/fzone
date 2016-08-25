@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="info">
+    <Appenders>
+        <Console name="CONSOLE" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{HH:mm:ss,SSS} %5p %l- %m%n"/>
+        </Console>
+
+        <RollingRandomAccessFile name="FILE" append="true"
+                                 fileName="${sys:catalina.home}/logs/admin-1822281.log"
+                                 filePattern="${sys:catalina.home}/logs/admin-1822281-%d{yyyy-MM-dd}.log.gz">
+            <PatternLayout pattern="%d %5p %l - %m%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="24" modulate="true"/>
+            </Policies>
+        </RollingRandomAccessFile>
+
+        <Async name="ASYNC" includeLocation="true">
+            <AppenderRef ref="FILE"/>
+            <AppenderRef ref="CONSOLE"/>
+        </Async>
+    </Appenders>
+
+    <Loggers>
+        <Logger name="org.springframework.mock.web.MockServletContext" level="error"/>
+
+        <Logger name="org.grs.admin" level="info"/>
+
+        <Logger name="win.doyto.fzone.mapper" level="debug"/>
+
+        <Logger name="org.apache.ibatis.transaction.jdbc" level="warn"/>
+
+        <Root level="info">
+            <AppenderRef ref="ASYNC"/>
+        </Root>
+    </Loggers>
+</Configuration>
