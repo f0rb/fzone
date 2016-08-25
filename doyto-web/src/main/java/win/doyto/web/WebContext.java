@@ -251,13 +251,17 @@ public final class WebContext {
     public static Locale getLocale() {
         WebContext context = contextStore.get();
         if (context.locale == null) {
-            HttpServletRequest request = getRequest();
-            String localeStr = request.getParameter("locale");
-            if (StringUtils.isNotEmpty(localeStr)) {
-                context.locale = new Locale(localeStr);
+            if (contextStore.get() != null) {
+                HttpServletRequest request = getRequest();
+                String localeStr = request.getParameter("locale");
+                if (StringUtils.isNotEmpty(localeStr)) {
+                    context.locale = new Locale(localeStr);
+                } else {
+                    localeStr = RequestUtils.getCookieValue(request, "locale");
+                    context.locale = StringUtils.isNotEmpty(localeStr) ? new Locale(localeStr) : Locale.CHINA;
+                }
             } else {
-                localeStr = RequestUtils.getCookieValue(request, "locale");
-                context.locale = StringUtils.isNotEmpty(localeStr) ? new Locale(localeStr) : Locale.CHINA;
+                context.locale = Locale.CHINA;
             }
         }
         return context.locale;
