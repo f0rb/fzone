@@ -10,6 +10,9 @@
     <modules>
         <module>doyto-rbac</module>
         <module>doyto-web</module>
+        <module>fzone-admin</module>
+        <module>fzone-admin-web</module>
+        <module>fzone-model</module>
     </modules>
     <packaging>pom</packaging>
 
