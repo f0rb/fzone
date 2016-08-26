@@ -9,6 +9,7 @@ import win.doyto.fzone.common.PageableModel;
 @lombok.Getter
 @lombok.Setter
 public class Nile extends PageableModel<Nile> {
+    private static final long serialVersionUID = 1L;
 
     public String id;
 

@@ -9,6 +9,8 @@ import win.doyto.fzone.common.CommonModel;
  * @author Yuanzhen on 2016-06-16.
  */
 public class Column extends CommonModel<Column> {
+    private static final long serialVersionUID = 1L;
+
     private String field;
     private String type;
     private String nullable;

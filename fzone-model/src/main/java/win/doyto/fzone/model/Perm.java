@@ -8,6 +8,8 @@ import win.doyto.fzone.common.PageableModel;
 import win.doyto.rbac.RBACPermission;
 
 public class Perm extends PageableModel<Perm> implements RBACPermission {
+    private static final long serialVersionUID = 1L;
+
     private String id;
 
     @NotNull(message = "权限名称不能为空")

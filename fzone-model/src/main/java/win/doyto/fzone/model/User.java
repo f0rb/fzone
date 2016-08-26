@@ -10,6 +10,8 @@ import win.doyto.fzone.common.PageableModel;
 import win.doyto.rbac.RBACUser;
 
 public class User extends PageableModel<User> implements RBACUser<Role> {
+    private static final long serialVersionUID = 1L;
+
     private Integer id;
     private String username;
     private String password;

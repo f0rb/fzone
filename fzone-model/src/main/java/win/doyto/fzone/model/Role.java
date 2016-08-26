@@ -15,6 +15,8 @@ import win.doyto.rbac.RBACRole;
 @Setter
 @NoArgsConstructor
 public class Role extends PageableModel<Role> implements RBACRole {
+    private static final long serialVersionUID = 1L;
+
     //public static final Role ROOT = new Role(RBACConstant.ROOT, "超级管理员", (short) 1);
     //public static final Role ADMIN = new Role(RBACConstant.ADMIN, "系统管理员", (short) 10);
     //public static final Role VIP = new Role(RBACConstant.VIP, "高级用户", (short) 30);

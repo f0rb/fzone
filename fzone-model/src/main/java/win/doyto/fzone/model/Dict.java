@@ -8,6 +8,7 @@ import win.doyto.fzone.common.PageableModel;
 @lombok.Getter
 @lombok.Setter
 public class Dict extends PageableModel<Dict> {
+    private static final long serialVersionUID = 1L;
 
     private Integer id;
 

@@ -8,6 +8,8 @@ import win.doyto.fzone.common.PageableModel;
 @lombok.Getter
 @lombok.Setter
 public class Post extends PageableModel<Post> {
+    private static final long serialVersionUID = 1L;
+
     public static Integer STATE_NEW = 1;
     public static Integer STATE_DRAFT = 2;
     public static Integer STATE_PUB = 3;
