@@ -88,7 +88,7 @@
                 </a>
                 <div id="collapse-{{menu.id}}" class="panel-collapse collapse {{['in'][$index]}}" role="tabpanel" aria-labelledby="heading-{{menu.id}}">
                     <div class="list-group">
-                        <a ui-sref="admin.{{sub.url}}" class="list-group-item" ng-repeat="sub in menu.submenu">{{sub.name}}</a>
+                        <a ui-sref="admin.{{sub.url}}" class="list-group-item" ng-repeat="sub in menu.submenu">{{sub.label}}</a>
                     </div>
                 </div>
             </div>
