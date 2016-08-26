@@ -1,72 +1,63 @@
-CREATE DATABASE IF NOT EXISTS `GZONE` /*!40100 DEFAULT CHARACTER SET utf8 */;
-USE `GZONE`;
+CREATE DATABASE IF NOT EXISTS `fzone` /*!40100 DEFAULT CHARACTER SET utf8 */;
+USE `fzone`;
 
-DROP TABLE IF EXISTS `Permission`;
-CREATE TABLE `Permission` (
-  `id`    INT(11)      NOT NULL AUTO_INCREMENT,
-  `perm`  VARCHAR(50)  NOT NULL
-  COMMENT '通过权限名称进行过滤',
-  `url`   VARCHAR(50)  NOT NULL
-  COMMENT '通过url进行过滤',
-  `intro` VARCHAR(100) NOT NULL,
-  PRIMARY KEY (`id`)
+DROP TABLE IF EXISTS fzone.`Perm`;
+CREATE TABLE fzone.Perm
+(
+    id CHAR(8) NOT NULL,
+    name VARCHAR(100) NOT NULL COMMENT '通过权限名称进行过滤',
+    memo VARCHAR(200),
+    createTime TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    createUserId INT(11) NOT NULL,
+    valid TINYINT(1) DEFAULT '1' NOT NULL,
+    PRIMARY KEY (`id`)
 )
-  ENGINE = InnoDB
-  DEFAULT CHARSET = utf8;
+    ENGINE = InnoDB
+    DEFAULT CHARSET = utf8;
 
-DROP TABLE IF EXISTS `Role`;
-CREATE TABLE `Role` (
-    `id` INT(11) NOT NULL AUTO_INCREMENT,
-    `name` VARCHAR(31) NOT NULL COMMENT '角色名',
-    `code` VARCHAR(31),
-    `rank` SMALLINT DEFAULT 99 NOT NULL,
-    `intro` VARCHAR(200),
-    `createTime` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    `createUserId` INT(11) NULL,
-    `updateTime` TIMESTAMP NULL ,
-    `updateUserId` INT(11),
-    `deleted` BOOLEAN NOT NULL DEFAULT FALSE,
+DROP TABLE IF EXISTS fzone.`Role`;
+CREATE TABLE fzone.`Role` (
+    id INT(11) NOT NULL AUTO_INCREMENT,
+    code VARCHAR(31) COMMENT '角色编码, 预置角色有值',
+    name VARCHAR(31) NOT NULL COMMENT '角色名',
+    rank SMALLINT(6) DEFAULT '32767' NOT NULL,
+    memo VARCHAR(200),
+    createTime TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    createUserId INT(11),
+    updateTime DATETIME,
+    updateUserId INT(11),
+    valid TINYINT(1) DEFAULT '1' NOT NULL,
     PRIMARY KEY (`id`)
 )
     ENGINE = InnoDB
     DEFAULT CHARSET = utf8
     COMMENT = '用户的角色';
+CREATE INDEX Role_code_index ON Role (code);
+CREATE INDEX Role_rank_index ON Role (rank);
 
-DROP TABLE IF EXISTS `RolePermission`;
-CREATE TABLE `RolePermission` (
-  `roleId` INT(11)     NOT NULL,
-  `permId` VARCHAR(50) NOT NULL,
-  PRIMARY KEY (roleId, permId),
-  KEY `fk_rp_permission` (permId),
-  KEY `fk_rp_role` (roleId),
-  CONSTRAINT `fk_rp_perm` FOREIGN KEY (permId) REFERENCES `Permission` (`id`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE,
-  CONSTRAINT `fk_rp_role` FOREIGN KEY (roleId) REFERENCES `Role` (`id`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE
-)
-  ENGINE = InnoDB
-  DEFAULT CHARSET = utf8;
-
-DROP TABLE IF EXISTS `User`;
-CREATE TABLE `User` (
-  `id`         INT(11)      NOT NULL AUTO_INCREMENT,
-  `username`   VARCHAR(50)  NOT NULL,
-  `password`   VARCHAR(255) NOT NULL,
-  `nickname`   VARCHAR(100)  NOT NULL,
-  `email`      VARCHAR(31)  NOT NULL,
-  `mobile`     VARCHAR(15)           DEFAULT NULL,
-  `createTime` TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `lastLogin`  DATETIME              DEFAULT NULL,
-  `lastActive` DATETIME              DEFAULT NULL,
-  `lastReset`  DATETIME              DEFAULT NULL,
-  `lastIp`     VARCHAR(63)           DEFAULT NULL,
-  `online`     INT(11)               DEFAULT NULL,
-  `emailFlag`  BIT(1)                DEFAULT NULL,
-  `token`      VARCHAR(63)           DEFAULT NULL,
-  `score`      INT(11)               DEFAULT NULL,
-  `rank`      SMALLINT               DEFAULT 32767,
+DROP TABLE IF EXISTS fzone.`User`;
+CREATE TABLE fzone.`User`
+(
+    id INT(11) NOT NULL AUTO_INCREMENT,
+    username VARCHAR(31) NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    nickname VARCHAR(31) NOT NULL,
+    email VARCHAR(100),
+    mobile VARCHAR(20),
+    lastLogin DATETIME,
+    lastActive DATETIME,
+    lastReset DATETIME,
+    lastIp VARCHAR(63),
+    online INT(11),
+    emailFlag BIT(1),
+    token VARCHAR(63),
+    score INT(11),
+    createTime TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updateTime DATETIME,
+    updateUserId INT(11),
+    valid TINYINT(1) DEFAULT '1',
+    createUserId INT(11),
+    rank SMALLINT(6) DEFAULT '32767' NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`),
   UNIQUE KEY `nickname` (`nickname`),
@@ -76,19 +67,25 @@ CREATE TABLE `User` (
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
 
-DROP TABLE IF EXISTS `Role`;
-CREATE TABLE `Role` (
-  `id`   INT(11)     NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(31) NOT NULL
-  COMMENT '角色名',
-  PRIMARY KEY (`id`)
+DROP TABLE IF EXISTS fzone.`RolePerm`;
+CREATE TABLE fzone.`RolePerm` (
+    `role` INT(11)     NOT NULL,
+    `perm` VARCHAR(50) NOT NULL,
+    PRIMARY KEY (role, perm),
+    KEY `fk_rp_perm` (perm),
+    KEY `fk_rp_role` (role),
+    CONSTRAINT `fk_rp_perm` FOREIGN KEY (perm) REFERENCES `Perm` (`id`)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
+    CONSTRAINT `fk_rp_role` FOREIGN KEY (role) REFERENCES `Role` (`id`)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
 )
-  ENGINE = InnoDB
-  DEFAULT CHARSET = utf8
-  COMMENT = '用户的角色';
+    ENGINE = InnoDB
+    DEFAULT CHARSET = utf8;
 
-DROP TABLE IF EXISTS `UserRole`;
-CREATE TABLE `UserRole` (
+DROP TABLE IF EXISTS fzone.`UserRole`;
+CREATE TABLE fzone.`UserRole` (
   `roleId` INT(11) NOT NULL,
   `userId` INT(11) NOT NULL,
   PRIMARY KEY (`roleId`, `userId`),
@@ -104,9 +101,8 @@ CREATE TABLE `UserRole` (
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
 
-
-DROP TABLE IF EXISTS `Feedback`;
-CREATE TABLE `Feedback` (
+DROP TABLE IF EXISTS fzone.`Feedback`;
+CREATE TABLE fzone.`Feedback` (
   `id`         INT(11)   NOT NULL AUTO_INCREMENT,
   `createTime` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `userId`     INT(11)            DEFAULT NULL,
@@ -124,8 +120,8 @@ CREATE TABLE `Feedback` (
   COMMENT = '用户反馈意见';
 
 
-DROP TABLE IF EXISTS `Order`;
-CREATE TABLE `Order` (
+DROP TABLE IF EXISTS fzone.`Order`;
+CREATE TABLE fzone.`Order` (
   `id`            BIGINT(20)     NOT NULL,
   `createTime`    TIMESTAMP      NOT NULL DEFAULT CURRENT_TIMESTAMP
   COMMENT '订单创建时间',
@@ -154,8 +150,8 @@ CREATE TABLE `Order` (
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
 
-DROP TABLE IF EXISTS Menu;
-CREATE TABLE gzone.Menu
+DROP TABLE IF EXISTS fzone.Menu;
+CREATE TABLE fzone.Menu
 (
     id INT(11)  NOT NULL AUTO_INCREMENT,
     name VARCHAR(50) NOT NULL,
@@ -174,7 +170,7 @@ CREATE TABLE gzone.Menu
     PRIMARY KEY(id)
 );
 
-CREATE VIEW gzone.MenuView AS
+CREATE VIEW fzone.MenuView AS
     SELECT  m.*, p.name AS parentName,
                  cu.username AS createUserName ,
                  uu.username AS updateUserName
@@ -184,10 +180,9 @@ CREATE VIEW gzone.MenuView AS
         LEFT JOIN User uu ON m.updateUserId = uu.id;
 
 
-INSERT INTO gzone.Menu
+INSERT INTO fzone.Menu
 (id, name, url, sequence, parentId, createTime, createUserId, updateTime, updateUserId, valid, label, scope, rank, html)
 VALUES
-    (0, '根目录', '#', 1, null, '2016-05-13 23:34:20', 1, null, null, 1, '根目录', 'ADMIN_ASIDE', 1, null),
     (1, 'admin', '/admin', 1, 0, '2016-08-22 00:11:19', 1, null, null, 1, '系统管理', 'ADMIN_ASIDE', 1, null),
     (2, '系统配置', '#', 1, 0, '2016-05-13 23:35:55', 1, '2016-08-22 12:44:51', 1, 1, '系统配置', 'ADMIN_ASIDE', 1, null),
     (3, '系统管理', '#', 2, 0, '2016-06-27 22:04:58', 1, '2016-08-22 12:45:04', 1, 1, '系统管理', 'ADMIN_ASIDE', 1, null),
@@ -202,8 +197,8 @@ VALUES
     (12,'dashboard', '#', 1, 0, '2016-08-21 23:58:03', 1, '2016-08-22 00:04:40', 1, 1, '用户管理面板', 'DASHBOARD_ASIDE', 1, null),
     (13,'config', '#', 1, 31, '2016-08-22 12:47:32', 1, null, null, 1, null, null, 1, null);
 
-DROP TABLE IF EXISTS `Dict`;
-CREATE TABLE Dict
+DROP TABLE IF EXISTS fzone.`Dict`;
+CREATE TABLE fzone.Dict
 (
     id           INT(11)     NOT NULL          AUTO_INCREMENT,
     name         VARCHAR(50) NOT NULL,
@@ -225,21 +220,7 @@ CREATE TABLE Dict
     PRIMARY KEY (`id`)
 );
 
-
-DROP TABLE IF EXISTS `Generator`;
-CREATE TABLE Generator
-(
-    id INT(11) PRIMARY KEY NOT NULL AUTO_INCREMENT,
-    modelName VARCHAR(20),
-    fullName VARCHAR(10),
-    name VARCHAR(10),
-    displayName VARCHAR(10),
-    pathJS VARCHAR(255),
-    pathHTML VARCHAR(255),
-    pathController VARCHAR(255)
-);
-
-CREATE TABLE `Zone` (
+CREATE TABLE fzone.`Zone` (
     id           INT(11)           NOT NULL          AUTO_INCREMENT,
     name        VARCHAR(100) NOT NULL,
     userId     INTEGER     NOT NULL,
@@ -257,8 +238,8 @@ CREATE TABLE `Zone` (
 );
 
 
-DROP TABLE IF EXISTS Post ;
-CREATE TABLE Post
+DROP TABLE IF EXISTS fzone.Post ;
+CREATE TABLE fzone.Post
 (
     id varchar(20) NOT NULL,
     content LONGTEXT,
@@ -278,8 +259,8 @@ CREATE TABLE Post
     PRIMARY KEY (`id`)
 );
 
-DROP VIEW IF EXISTS PostView ;
-CREATE VIEW PostView AS
+DROP VIEW IF EXISTS fzone.PostView ;
+CREATE VIEW fzone.PostView AS
     SELECT
         p.*,
         u.nickname AS author,
@@ -289,7 +270,7 @@ CREATE VIEW PostView AS
         LEFT JOIN Category c ON p.categoryId = c.id;
 
 
-CREATE TABLE Category (
+CREATE TABLE fzone.Category (
     id           INT(11)     NOT NULL          AUTO_INCREMENT,
     name        VARCHAR(45) NOT NULL,
     memo    VARCHAR(225),
@@ -297,7 +278,7 @@ CREATE TABLE Category (
     createTime   TIMESTAMP   NOT NULL          DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`)
 );
-CREATE TABLE Comment (
+CREATE TABLE fzone.Comment (
     id           INT(11)     NOT NULL          AUTO_INCREMENT,
     author    VARCHAR(45) NOT NULL,
     content   VARCHAR(45) NOT NULL,
@@ -312,8 +293,8 @@ CREATE TABLE Comment (
 );
 
 
-DROP TABLE IF EXISTS Nile ;
-CREATE TABLE Nile (
+DROP TABLE IF EXISTS fzone.Nile ;
+CREATE TABLE fzone.Nile (
     id         CHAR(32)  NOT NULL,
     parentId   CHAR(32),
     name       VARCHAR(1000),
