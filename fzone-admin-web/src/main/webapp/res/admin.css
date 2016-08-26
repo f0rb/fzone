@@ -142,27 +142,16 @@ html, body {
   overflow: hidden; }
 
 /*⬇️⬇️⬇ .dy-layout ⬇️⬇️⬇*/
-.dy-layout .navbar {
-  border: none;
-  border-radius: 0;
-  -webkit-box-shadow: none;
-  box-shadow: none; }
-
 .dy-layout .panel, .dy-layout .panel-heading {
   border-radius: 0; }
 
-.dy-layout > header {
-  position: fixed;
-  top: 0;
-  width: 100%;
-  z-index: 1000; }
-  .dy-layout > header .navbar {
-    min-height: 40px;
-    background-color: #337ab7;
-    margin-bottom: 0; }
-  .dy-layout > header .navbar-brand {
-    height: 40px;
-    padding: 10px; }
+.dy-layout > header .navbar {
+  min-height: 40px;
+  background-color: #337ab7; }
+
+.dy-layout > header .navbar-brand {
+  height: 40px;
+  padding: 10px; }
 
 .dy-layout > section {
   display: flex;

@@ -1,11 +1,11 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" session="false" %>
 <!DOCTYPE html>
-<html ng-app="GRSApp">
+<html ng-app="FzoneApp">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-    <title>GRS - 后台管理系统</title>
+    <title>Fzone - 后台管理系统</title>
     <base href="${pageContext.request.contextPath}/">
 
     <link rel="stylesheet" href="<c:url value="/lib/font-awesome/css/font-awesome.min.css"/>">
@@ -31,7 +31,7 @@
     <link rel="stylesheet" href="<c:url value="/res/admin.css"/>">
     <script src="<c:url value="/res/doyto.js"/>"></script>
     <script>
-        var adminApp = angular.module('GRSApp', [
+        var adminApp = angular.module('FzoneApp', [
             'ngResource',
             'ngTouch',
             'angularResizable',
@@ -48,7 +48,7 @@
 </head>
 <body class="dy-layout" ng-init="loadLoginUser()">
 <header>
-    <nav class="navbar navbar-inverse">
+    <nav class="navbar navbar-inverse navbar-fixed-top">
         <div class="container-fluid">
             <div class="navbar-header">
                 <a class="navbar-brand" href="<c:url value="/"/>">

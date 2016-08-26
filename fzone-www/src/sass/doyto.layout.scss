@@ -15,7 +15,7 @@ html, body {
 .dy-layout {
 
   .navbar {
-    @include no-border;
+    //@include no-border;
     .dropdown-menu {
       //@include no-border;
     }
@@ -27,16 +27,16 @@ html, body {
   }
 
   > header {
-    position:fixed;
-    top:0;
-    width:100%;
-    z-index:1000;
+    //position:fixed;
+    //top:0;
+    //width:100%;
+    //z-index:1000;
 
     //overflow:hidden;
     .navbar {
       min-height:$headerHeight;
       background-color:#337ab7;
-      margin-bottom:0;
+      //margin-bottom:0;
     }
 
     .navbar-brand {
