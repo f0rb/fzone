@@ -13,7 +13,6 @@ public interface AppConstant {
     String BACKSLASH = "\\";
     String CAPTCHA_IMAGE = "captcha.png";
     String RELOAD_CONFIG = "reload";
-    String EXCEPTION_ATTR = "org.grs.error.exception";
 
     String ROOT = "root";
 

@@ -23,8 +23,6 @@
     <Loggers>
         <Logger name="org.springframework.mock.web.MockServletContext" level="error"/>
 
-        <Logger name="org.grs.admin" level="info"/>
-
         <Logger name="win.doyto.fzone.mapper" level="debug"/>
 
         <Logger name="org.apache.ibatis.transaction.jdbc" level="warn"/>

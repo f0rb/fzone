@@ -6,10 +6,10 @@ import javax.validation.Valid;
 
 import org.apache.commons.lang3.StringUtils;
 import win.doyto.fzone.admin.common.AppContext;
-import org.grs.core.web.ResponseObject;
+import win.doyto.web.ResponseObject;
 import win.doyto.fzone.mapper.{{gen.name | capitalize}}Mapper;
 import win.doyto.fzone.model.{{gen.name | capitalize}};
-import org.grs.rbac.RBACCheck;
+import win.doyto.rbac.RBACCheck;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 

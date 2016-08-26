@@ -30,7 +30,7 @@ public final class WebContext {
     private static final String REQUEST_REDIRECT = "redirect";
     private static final String SESSION_REDIRECT = "session.redirect";
     private static final String SESSION_CAPTCHA = "session.captcha";
-    private static final String EXCEPTION_ATTR = "org.grs.error.exception";
+    private static final String EXCEPTION_ATTR = "win.doyto.error.exception";
     private static final Map NULL_MESSAGES = new HashMap();
     private static String WEB_REAL_PATH = null;
     private static String WEB_URL = null;

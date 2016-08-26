@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Class org.grs.core.rbac.RBACManager description goes here.
+ * RBAC管理接口.
  *
  * @author f0rb,
  * @version 1.0.0, 2012-10-31 14:40
