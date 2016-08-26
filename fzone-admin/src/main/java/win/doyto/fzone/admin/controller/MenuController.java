@@ -93,21 +93,15 @@ public class MenuController {
         ResponseObject ret = new ResponseObject();
         List<Menu> menuList = getMenuList();
 
-        Menu rootMenu = null;
         Map<Integer, Menu> treeMap = new HashMap<>();
+        Menu rootMenu = Menu.Root;
+        treeMap.put(rootMenu.getId(), rootMenu);
         for (Menu mobileMenu : menuList) {
             treeMap.put(mobileMenu.getId(), mobileMenu);
             if (Objects.equals(mobileMenu.getName(), "admin")) {
                 rootMenu = mobileMenu;
             }
         }
-        //如果查询结果中找不到根菜单, 则伪造一个存到treeMap里
-        /*if (rootMenu == null) {
-            rootMenu = new Menu();
-            rootMenu.setId(0);
-            rootMenu.setSubmenu(new ArrayList<Menu>());
-            treeMap.put(rootMenu.getId(), rootMenu);
-        }*/
 
         // 将子菜单加入到父菜单的sub数组中
         //忽略父菜单的url项
